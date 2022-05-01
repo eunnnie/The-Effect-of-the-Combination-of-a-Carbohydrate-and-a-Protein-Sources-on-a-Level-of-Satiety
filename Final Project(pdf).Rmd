@@ -1,0 +1,122 @@
+---
+title: "The Effect of the Combination of a Carbohydrate and a Protein Sources on a Level of Satiety"
+author: '"Eun Lim"'
+date: '2020.08.21 '
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library("FrF2")
+library(knitr)
+```
+
+### Description 
+
+  The objective of the experiment is to compare the effect of a carbohydrate source and a protein source on a level of satiety and find the most effective combination in terms of keeping one full. 
+  
+  The experiment is a replicated $2^{2}$ factorial experiment, such that the number of replications is two. There are two factors; a source of carbohydrate and a source of protein, and each of them has 2 levels, 150g of pumpkins and sweet potatoes, and 3 eggs and 100g of chicken breasts. Each random combination is repeated twice and the combination a source of carbs and protein is randomly assigned by an R script prior to the start of experiment, and is consumed for a lunch everyday. Also, the level of satiety is recorded 4 hours after taking a lunch. Note that the level of satiety will be recorded depending on how the subject feels 4 hours after taking a meal, range from 1 to 5, where 1=very hungry, 2=moderately hungry, 3=not hungry&not full, 4=moderately hungry, 5=full.
+
+  
+  For a weight loss, consuming a low-carlorie, low-GI, complex carbohydrate and lean protein is essential. With an advise of a professional personal trainer and a nutritionist, the subject was advised to consume 150g of pumpkins and sweet potatoes, and 3 eggs and 100g of chicken breasts as major diet components to maximize the result of weight loss and to minimize the result of muscle loss. However, to keep the diet routine sustainable, keeping the level of satiety high for at least 4 hours is important and so, the experiment is conducted to compare the effect of the combination of a carbohydrate source and a protein source on a level of satiety and find the most effective combination in terms of keeping one, in this case, the subject, full.  
+  
+  Note that 150g of sweet potatoes and pumpkins both contain approximately 30g of carbohydrate and 4 eggs and 130g of chicken breast contain approximately 30g of protein. These are set equal to avoid any bias arises from different nutritional intake, and the type of food are selected from similar food groups, as sweet potatoes and pumpkins are both from a low GI and complex carbohydrate group, and eggs and chicken breasts are from a lean protein group. These selections are significant to avoid the possible bias occur from the effect of insulin and the effect of fat which influence the duration of one feeling full. In addition, since 4 eggs have about 14g more fat than 130g of chicken breast, it will be cooked with 14g of olive oil to minimize the possible bias from the total fat consumption. Also, meals before and after a lunch was strictly controlled (set to be the same meal) to avoid any bias. 
+  
+  This experiment is intended to find 2 things; 1) Statistical analysis of factorial experiment and 2) Optimal diet combination.
+  
+  Since this project requires the statistical analysis of $2^{k}$ factorial experiment, as carrying out the experiment, we will be able to manipulate the raw data to statistical model to analyze in order to obtain some meaningful information and conduct a conclusion. 
+  
+  Additionally, since the result of the experiment will indicate which combination is optimal (or perhaps all combinations are the same), we will be able to choose the optimal combination. 
+  
+### Analysis of data 
+
+```{r}
+raw_data <- read.csv("C:\\Users\\lsy76\\Desktop\\final subissions\\sta305\\Project_data.csv") #opening the experiment data
+
+carb <- ifelse(raw_data$Carbohydrate == "Pumpkin", -1, 1) #dummy coding
+pro <- ifelse(raw_data$Protein == "Egg", -1, 1) #dummy coding 
+sat <- raw_data$Satiety
+
+d <- data.frame(carb, pro, sat) #creation of a new data.frame that uses dummy coding
+
+fit <- lm(sat ~ carb*pro, data=d) #linear model
+matrix.mod <- model.matrix(fit) #design matrix
+
+layout(matrix(c(1,1,2,2), nrow = 2, ncol = 4, byrow = TRUE))
+
+cubePlot(fit,"carb","pro","pro", main = "Cube plot for carbohydrate and protein", cex.title=1.5*0.5,cex.lab=par("cex.lab"), cex.ax=par("cex.axis"),  
+    cex.clab=1.2*0.5, size=0.5, round=NULL,
+    abbrev=4,y.margin.add=-0.2, modeled=TRUE)#since there are only two factors, pro variable is used twice.
+
+interaction.plot(d$carb,d$pro,d$sat, type = "l", 
+                 main = "Interaction plot for carbohydrate and protein",
+                 xlab = "Carbohydrate",trace.label = "Protein",
+                 ylab = "Level of Satiety") #Interaction plot 
+
+```
+
+  Since this experiment only consists of two factors, instead of 3, the protein factor is used twice to create a complete cube plot. Therefore, this cube plot shows how this design produces 8 comparisons along the 8 edges of the cube: four measures of the level of satiety of source of carbohydrate change; four measures of the level of satiety of source of protein change, because the edges on the top face can be ignored. From the cube plot, we find that the average level of satiety is at the highest when the source of carbohydrate and protein are a sweet potato and a chicken breast, and is at the lowest when the combination of a pumpkin and eggs is consumed. The order of level of satiety can be noted as the following, using the highest to lowest order: (Sweet potato, Chicken breast), (Pumpkin, Chicken breast), (Sweet Potato, eggs), (Sweet Potato, Chicken breast).
+
+  The interaction plot shows that there is no interaction effect between the sources of carbohydrate and protein because the two lines are parallel.
+
+```{r}
+ests <- coef(summary(fit))
+
+kable(2*ests, digits = 2) #visualization of the model summary in table 
+```
+
+  The estimated least squares coefficients are one-half the factorial estimates, and the intercept is the sample mean. Therefore, the factorial estimates are twice the OLS coefficients. Thus, the values in the table is double the least squares coefficients computed by a R script.
+
+ The table above shows that the main effect of carbohydrate is 1.0 with the p-value = 0.09, the main effect of protein is 1.5 with the p-value = 0.09 and the interaction effect between carbohydrate and protein is 0 with the p-value = 2.00. According to these numbers, holding every else constant, taking a sweet potato, instead of a pumpkin, increases the satiety level by 1 level and similarly, taking a chicken breast increases the level of satiety by 1.5 level. Additionally, there is no interaction between taking different types of carbs and protein sources. 
+
+ the p-value for $/{\beta}_{1}$ corresponds to the factorial effect for carbohydrate 
+ 
+ $H_{0}: {\beta}_{1} = 0$
+ $H_{a}: {\beta}_{1} \neq 0$
+ 
+ If the null hypothesis is true, then ${\beta}_{1} = 0 \implies carb = 0 \implies {\mu}_{carb+} - {\mu}_{carb-} = 0 \implies {\mu}_{carb+} = {\mu}_{carb-}$, where ${\mu}_{carb+}$ and ${\mu}_{carb-}$ are the average levels of satiety when the source of carbs is a sweet potato and a pumpkin, respectively.  
+
+  The p-value for the carbs is greater than the level of significance, i.e., $(Pr(>|t|)=0.09) > 0.05$. So, we fail to reject the null hypothesis and conclude that there isn't a statistically significant evidence of a main effect of carbohydrate.  
+  
+   the p-value for $/{\beta}_{2}$ corresponds to the factorial effect for protein 
+ 
+ $H_{0}: {\beta}_{2} = 0$
+ $H_{a}: {\beta}_{2} \neq 0$
+ 
+ If the null hypothesis is true then ${\beta}_{2} = 0 \implies carb = 0 \implies {\mu}_{pro+} - {\mu}_{pro-} = 0 \implies {\mu}_{pro+} = {\mu}_{pro-}$, where ${\mu}_{pro+}$ and ${\mu}_{pro-}$ are the average levels of satiety when the source of protein is chicken breasts and eggs, respectively.  
+
+  The p-value for carb is smaller than the level of significance, i.e., $(Pr(>|t|)=0.03) < 0.05$. So, we reject the null hypothesis and conclude that there is a statistically significant evidence of the main effect of protein, i.e.,  the source of protein affects the level of satiety and taking chicken breasts is more effective at keeping the satiety level high than taking eggs. 
+  
+  the p-value for $/{\beta}_{2}$ corresponds to the interaction effect between carbohydrate and protein 
+ 
+ $H_{0}: {\beta}_{3} = 0$
+ $H_{a}: {\beta}_{3} \neq 0$
+ 
+ If the null hypothesis is true then ${\beta}_{3} = 0 \implies carb:pro = 0 \implies {\mu}_{carb|pro+} - {\mu}_{carb|pro-} = 0 \implies {\mu}_{carb|pro+} = {\mu}_{carb|pro-}$, where ${\mu}_{carb|pro+}$ and ${\mu}_{carb|pro-}$ are the average effect of carb given that the source of protein is a chicken breast and the average effect of carb given that the source of protein is eggs. 
+
+  The p-value for interaction effect is greater than the level of significance, i.e., $(Pr(>|t|)=2.00) > 0.05$. So, we fail reject the null hypothesis and conclude that there isn't a statistically significant evidence of the existence of a interaction effect.
+  
+  The standard error of a factorial effect is computed to be 0.35 by the R script by multiplying the OLS standard error by 2, so the estimated variance of the effect is `r 0.35^2`. 
+
+
+```{r}
+kable(
+  round(
+    2*cbind(
+      Estimate = fit$coef, 
+      confint(fit)
+    )[-1,], 2)) #visualization of confidence interval in table
+```
+
+The 95% confidence interval of the main effect of carb is [0.02, 1.98] and of protein is [0.52, 2.48], and the confidence interval of the interaction effect is [-0.98, 0.98], as shown in the table above, i.e, 95% of true factorial effects (the two main effects and one interaction effect) will each be within the stated ranges.  
+
+\newpage
+
+### Conclusions 
+
+In the previous section, we drew some conclusions, using the p-values of factorial effect. For the main effect of carbohydrate and the interaction effect between carbohydrate and protein, the p-values indicates that we fail to reject null hypothesises, i.e., there is no statistical evidence that the source of carbohydrate affect the level of satiety and there exists an interaction effect, although the coefficients imply that taking sweet potato increases the level of satiety by 1. However, the p-value of the main effect of protein indicates that we reject the null hypothesis and thus, the source of protein affects the level of satiety. Especially, the effect estimate of protein implies that, on average, taking chicken breasts as a source of protein increases the level of satiety by 1.5 level. Therefore, to maintain a sustainable and most effective diet for weight loss, choosing a carb source between a pumpkin and sweet potato does not really matter but it is better to take a chicken breast instead of eggs. 
+
+  
+  
+
+  
