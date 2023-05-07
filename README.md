@@ -55,6 +55,4 @@ $2^{2}$ 설계로 요인의 수가 2개이고, 각 요인마다 수준수가 2�
 - 3대 영양소는 탄수화물, 단백질, 지방을 모두 고려해서 실험해보는 것도 의미가 있을 것 같아요. 
 - 포만감 점수는 너무 주관적인 지표라서 좀 더 과학적인 접근 (혈당지수 등.)이 필요할 것 같습니다. 
 
-### 영상
-실험 내용과 결과를 설명하는 영상입니다. 영어로 설명하긴 하지만, 영상이 편하신 분들을 위해 준비했어요. 
-<iframe width="1023" height="576" src="https://www.youtube.com/embed/v8frSBtaCq8" title="presentation" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
