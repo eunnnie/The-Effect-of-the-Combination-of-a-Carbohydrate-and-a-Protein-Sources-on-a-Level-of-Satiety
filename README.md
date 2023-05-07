@@ -57,4 +57,4 @@ $2^{2}$ 설계로 요인의 수가 2개이고, 각 요인마다 수준수가 2�
 
 ### 영상
 실험 내용과 결과를 설명하는 영상입니다. 영어로 설명하긴 하지만, 영상이 편하신 분들을 위해 준비했어요. 
-<iframe width="1044" height="587" src="https://youtu.be/v8frSBtaCq8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="1023" height="576" src="https://www.youtube.com/embed/v8frSBtaCq8" title="presentation" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
