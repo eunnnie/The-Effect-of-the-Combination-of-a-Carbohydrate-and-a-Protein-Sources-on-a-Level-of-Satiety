@@ -1,6 +1,6 @@
 ---
 title: "The Effect of the Combination of a Carbohydrate and a Protein Sources on a Level of Satiety"
-author: '"Eun Lim"'
+author: '"'
 date: '2020.08.21 '
 output: pdf_document
 ---
